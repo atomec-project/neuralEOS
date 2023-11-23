@@ -1,0 +1,11 @@
+https://gitlab.com/libxc/libxc/-/archive/6.2.2/libxc-6.2.2.tar.gz
+atoMEC
+numpy
+pandas
+scikit-learn
+jupyter
+scipy
+matplotlib
+tensorflow-cpu
+scikeras
+optuna

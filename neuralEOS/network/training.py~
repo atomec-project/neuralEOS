@@ -1,0 +1,108 @@
+import numpy as np
+import os.path
+import pandas as pd
+from sklearn.model_selection import (
+    RepeatedKFold,
+    StratifiedKFold,
+    RepeatedStratifiedKFold,
+)
+from sklearn.metrics import make_scorer
+from sklearn import preprocessing
+from scikeras.wrappers import KerasRegressor
+import optuna
+import pickle as pkl
+import time
+import sys
+import string
+
+import nn_pipeline
+
+# import config
+
+
+class Training:
+    def __init__(self, parameters):
+        self.parameters = parameters
+        self.X_scaler = None
+        self.Y_scaler = None
+
+    def train_inner_loop(self, training_file, testing_file, use_aa=False):
+
+        if self.use_aa:
+            feature_list = self.parameters.feature_list_aa
+            log_feature_map = self.parameters.log_feature_map_aa
+        else:
+            feature_list = self.parameters.feature_list_no_aa
+            log_feature_map = self.parameters.log_feature_map_no_aa
+
+        # load the training and testing dfs
+        train_df = pd.read_csv(training_file)
+        test_df = pd.read_csv(testing_file)
+
+        # set up the inner CV object
+        inner_cv = RepeatedStratifiedKFold(
+            n_splits=self.parameters.n_cv_inner,
+            n_repeats=self.parameters.n_cv_inner_repeats,
+        )
+
+        # set up lists / arrays for each random feature subset
+        optimal_params = []
+        features_all = []
+        scores = np.zeros((1, 3))
+
+        # randomly choose # of features
+        N_features = list(
+            np.random.choice(
+                range(
+                    self.parameters.n_features_min, self.parameters.n_features_max + 1
+                ),
+                1,
+            )
+        )[0]
+        scores[:, 0] = N_features
+
+        # select N_features randomly
+        features = list(np.random.choice(feature_list, N_features, replace=False))
+
+        # select and scale the features
+        (
+            X_scaled,
+            Y_scaled,
+            self.X_scaler,
+            self.Y_scaler,
+        ) = nn_pipeline.select_scale_features(train_df, features, log_feature_map)
+
+        print(X_scaled)
+
+    def select_scale_features(
+        self, train_df, features, log_feature_map, X_scaler=None, Y_scaler=None
+    ):
+        r"""Select and scale the features and output."""
+
+        for i, feature in enumerate(features):
+            if log_feature_map[i] == 1:
+                train_df[feature] = np.log10(np.abs(train_df[feature]))
+
+        X_init = train_df[features]
+
+        if X_scaler == None:
+            X_scaler = preprocessing.StandardScaler().fit(X_init)
+        # scale the features
+        if self.parameters.scale_features:
+            X_scaled = X_scaler.transform(X_init)
+        else:
+            X_scaled = X_init.values
+
+        # scale the output
+        if self.parameters.log_target:
+            Y_init = np.log10(train_df["P_ref"]).values
+        else:
+            Y_init = train_df["P_ref"].values
+        if Y_scaler == None:
+            Y_scaler = preprocessing.StandardScaler().fit(Y_init)
+        if scale_Y:
+            Y_scaled = Y_scaler.transform(Y_init)[:, 0]
+        else:
+            Y_scaled = Y_init[:, 0]
+
+        return X_scaled, Y_scaled, X_scaler, Y_scaler
