@@ -51,13 +51,28 @@ The source code is found in the `neuralEOS` directory and structured as follows:
 │   ├── output       <- Analysis of results, generation of figures
 ```
 
+## Data and pre-trained models
+
+The output of the average-atom calculations and pre-trained final models can be found [here](https://rodare.hzdr.de/record/2289).
+
+In this data repository there are two folders:
+
+1. `trained_models.tar`: The final trained models. There are 6 models in total: 3 for the network trained with average-atom data, and 3 for the network trained without. The average-atom based models are prepended with `aa_`. As described in the [paper](https://arxiv.org/abs/2305.06856), a simple (equally weighted) average of the predictions from the 3 models should be taken to compute the actual prediction.
+
+2. `atoMEC_data.tar.gz`: The output from the average-atom calculations. This data is structured in the form:
+ 
+    `<element>/rho_<density>/T_<temperature>/lda/*`
+
+    The average-atom outputs described in the [paper](https://arxiv.org/abs/2305.06856) are found in the `output.pkl` file.
+
+
 ## Citation
 
 If you use this repository in your research, you must cite the accompanying paper:
 
-1. Reference paper here once accepted
+1. Callow, T. J., Kraisler, E., & Cangi, A. (2023). Physics-enhanced neural networks for equation-of-state calculations. arXiv preprint arXiv:2305.06856.
 
 It is highly likely that you should also cite the two data sources used to train the neural network models:
 
-2. FPEOS citation here
-3. FP-Be citation here
+2. Militzer, B., González-Cataldo, F., Zhang, S., Driver, K. P., & Soubiran, F. (2021). First-principles equation of state database for warm dense matter computation. Physical Review E, 103(1), 013203. https://doi.org/10.1103/PhysRevE.103.013203
+3. Y. H. Ding, S. X. Hu; First-principles equation-of-state table of beryllium based on density-functional theory calculations. Phys. Plasmas 1 June 2017; 24 (6): 062702. https://doi.org/10.1063/1.4984780
