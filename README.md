@@ -1,6 +1,6 @@
 # Physics-enhanced neural networks for equation-of-state calculations
 
-This repository contains the code required to reproduce<sup>1</sup> the results in the paper ["Physics-enhanced neural networks for equation-of-state calculations"](https://arxiv.org/abs/2305.06856).
+This repository contains the code required to reproduce<sup>1</sup> the results in the paper ["Physics-enhanced neural networks for equation-of-state calculations"](https://iopscience.iop.org/article/10.1088/2632-2153/ad13b9).
 
 This README is rather brief as it is designed to accompany the paper. It is essential to read the paper to understand the repository.
 
@@ -63,14 +63,14 @@ In this data repository there are two folders:
  
     `<element>/rho_<density>/T_<temperature>/lda/*`
 
-    The average-atom outputs described in the [paper](https://arxiv.org/abs/2305.06856) are found in the `output.pkl` file.
+    The average-atom outputs described in the [paper](https://iopscience.iop.org/article/10.1088/2632-2153/ad13b9) are found in the `output.pkl` file.
 
 
 ## Citation
 
 If you use this repository in your research, you must cite the accompanying paper:
 
-1. Callow, T. J., Kraisler, E., & Cangi, A. (2023). Physics-enhanced neural networks for equation-of-state calculations. arXiv preprint arXiv:2305.06856.
+1. Callow, T., Nikl, J., Kraisler, E., & Cangi, A. (2023). Physics-enhanced neural networks for equation-of-state calculations (2023). Machine Learning: Science and Technology. https://doi.org/10.1088/2632-2153/ad13b9
 
 It is highly likely that you should also cite the two data sources used to train the neural network models:
 
